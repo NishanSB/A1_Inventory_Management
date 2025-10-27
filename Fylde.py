@@ -10,10 +10,10 @@ root.title("Login")  # Setting window title
 font_size = ("Arial", 16) # sets font_size to 16 which is bigger as it was too small
 
 def login(): # Login confirmation function
-    entered_username = username_entry.get()
-    entered_password = password_entry.get() #G etting the inputted username and password and assigning them to variables.
+    entered_username = username_entry.get().strip()
+    entered_password = password_entry.get().strip() #G etting the inputted username and password and assigning them to variables.
 
-    with open("D:\\Python\\SDLC assignment\\users.csv", 'r', newline = '') as file: # Open and read the users.csv file
+    with open("D:\\Python\\SDLC assignment\\users.csv", 'r', newline = '') as file: # Open and read the users.csv file. It also turns out newline is pretty much a no brainer to add as things can only go wrong without it.
         csvreader = csv.DictReader(file) # File reader
 
         for row in csvreader:
@@ -69,9 +69,9 @@ def openInvManager():
 
     # Adds item into inventory(csv).
     def addItem():
-        name     = item_entry.get()
-        sku      = sku_entry.get()
-        quantity = quantity_entry.get()
+        name     = item_entry.get().strip()
+        sku      = sku_entry.get().strip()
+        quantity = quantity_entry.get().strip()
         if not name or not sku or not quantity: # If all fields aren't given
             message_label.config(text = "All fields required.") # Changes message_label to say All fields required
             return
@@ -83,7 +83,7 @@ def openInvManager():
 
     # Uses the SKU to only display a certain item.
     def searchItem():
-        sku = sku_entry.get()
+        sku = sku_entry.get().strip()
         if not sku:
             message_label.config(text = "Enter SKU to search.")
             return
@@ -102,7 +102,7 @@ def openInvManager():
 
     # Removes an item from the inventory using the SKU.
     def removeItem():
-        sku = sku_entry.get()
+        sku = sku_entry.get().strip()
         if not sku:
             message_label.config(text = "Enter SKU to remove.")
             return
@@ -148,8 +148,8 @@ def openInvManager():
     quantity_entry = tk.Entry(inputFrame, font = font_size)
 
     # Displaying all necessary buttons, entries and labels.
-    item_label.grid(row     = 0, column = 0)
-    item_entry.grid(row     = 0, column = 1)    
+    item_label.grid(row     = 0, column = 0) #Label names all on the same side so column is 0
+    item_entry.grid(row     = 0, column = 1) #Entries all on the same side so column is 1 
     sku_label.grid(row      = 1, column = 0)
     sku_entry.grid(row      = 1, column = 1)
     quantity_label.grid(row = 2, column = 0)
@@ -163,11 +163,11 @@ def openInvManager():
     message_label.pack()
 
     # Sets up a tree using treeview for handling and displaying the data.
-    tree = ttk.Treeview(window, columns = ("Item Name", "SKU", "Quantity"), show = "headings")
-    for column in ("Item Name", "SKU", "Quantity"):
+    tree = ttk.Treeview(window, columns = ("Item Name", "SKU", "Quantity"), show = "headings") #Tree of Item name and SKU and Quantity and it will show those headings.
+    for column in ("Item Name", "SKU", "Quantity"): # Iterates through columns
         tree.heading(column, text = column)
         tree.column(column, width = 200)
-    tree.pack(pady = 10, fill = "both", expand = True)
+    tree.pack(pady = 10, fill = "both", expand = True) #Fits the rest of the page that isn't filled with frames.
 
     loadInventory() # Loads the inventory up.
 
