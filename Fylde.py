@@ -72,9 +72,21 @@ def openInvManager():
         name     = item_entry.get().strip()
         sku      = sku_entry.get().strip()
         quantity = quantity_entry.get().strip()
+        if not quantity.isdigit() or int(quantity) <= 0:
+            message_label.config(text = "Quantity must be a positive number")# Test fix- Makes sure quantity is a positive number
+            return
+        if not sku.isdigit() or int(sku) <= 0:
+            message_label.config(text = "SKU must be a positive number")# Test fix- Makes sure SKU is a positive number
+            return
         if not name or not sku or not quantity: # If all fields aren't given
             message_label.config(text = "All fields required.") # Changes message_label to say All fields required
             return
+        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'r', newline = '') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row["SKU"] == sku:
+                    message_label.config(text = "Item already exists")
+                    return
         with open("D:\\Python\\SDLC assignment\\inventory.csv", 'a', newline = '') as file:
             writer = csv.writer(file)
             writer.writerow([name, sku, quantity]) #Adds the new name,sku and quantity to the csv
@@ -125,10 +137,10 @@ def openInvManager():
             message_label.config(text = "Item Not Removed.") # Display Purposes
         loadInventory() # Reloads the inventory manager without the removed item.
 
-
     # Adds Inventory Manager to the new window and pads it down slightly.
     label = tk.Label(window, text = "Inventory Manager", font = ("Arial", 16))
     label.pack(pady = 10)
+
 
     # Making a new frame for the inputs.
     inputFrame = tk.Frame(window)
@@ -162,7 +174,7 @@ def openInvManager():
     message_label = tk.Label(window, text = "", font = font_size)
     message_label.pack()
 
-    # Sets up a tree using treeview for handling and displaying the data.
+     #Sets up a tree using treeview for handling and displaying the data.
     tree = ttk.Treeview(window, columns = ("Item Name", "SKU", "Quantity"), show = "headings") #Tree of Item name and SKU and Quantity and it will show those headings.
     for column in ("Item Name", "SKU", "Quantity"): # Iterates through columns
         tree.heading(column, text = column)
