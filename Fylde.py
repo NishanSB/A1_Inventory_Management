@@ -3,9 +3,6 @@ from tkinter import ttk # Importing ttk for treeview.
 import csv # Importing csv for data handling
 import os #import operating system to change directory.
 
-#Changes directory to current directory.
-os.chdir('\\\\unity_cifs.lits.blackpool.ac.uk\\StudentQ1\\113\\30259113\\Documents\\A1_Inventory_Management-main')
-
 root = tk.Tk() # Making the GUI
 root.geometry("600x300")  # Setting window size
 root.title("Login")  # Setting window title
