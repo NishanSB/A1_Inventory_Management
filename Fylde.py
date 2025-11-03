@@ -1,7 +1,10 @@
-import tkinter as tk # Importing tkinter and shortening it to tk 
+import tkinter as tk # Importing tkinter and shortening it to tk. 
 from tkinter import ttk # Importing ttk for treeview.
 import csv # Importing csv for data handling
+import os #import operating system to change directory.
 
+#Changes directory to current directory.
+os.chdir('\\\\unity_cifs.lits.blackpool.ac.uk\\StudentQ1\\113\\30259113\\Documents\\A1_Inventory_Management-main')
 
 root = tk.Tk() # Making the GUI
 root.geometry("600x300")  # Setting window size
@@ -13,7 +16,7 @@ def login(): # Login confirmation function
     entered_username = username_entry.get().strip()
     entered_password = password_entry.get().strip() #G etting the inputted username and password and assigning them to variables.
 
-    with open("D:\\Python\\SDLC assignment\\users.csv", 'r', newline = '') as file: # Open and read the users.csv file. It also turns out newline is pretty much a no brainer to add as things can only go wrong without it.
+    with open("users.csv", 'r', newline = '') as file: # Open and read the users.csv file. It also turns out newline is pretty much a no brainer to add as things can only go wrong without it.
         csvreader = csv.DictReader(file) # File reader
 
         for row in csvreader:
@@ -21,7 +24,7 @@ def login(): # Login confirmation function
                 result_label.config(text = "Login Success") # If they match print login success onto the screen
                 openInvManager()
                 return
-    result_label.config(text = "Login Failed") # If they dont match then the password is wrong and it prints login failed onto the scree.
+    result_label.config(text = "Login Failed") # If they dont match then the password is wrong and it prints login failed onto the screen.
 
 frame = tk.Frame(root) # Puts the login area into a frame
 frame.place(relx = 0.5, rely = 0.5, anchor = "center") # Centres the frame into the middle of the screen
@@ -62,7 +65,7 @@ def openInvManager():
     # Loading the inventory csv file.
     def loadInventory():
         tree.delete(*tree.get_children()) # * will separate get_children() into different arguments to delete to clear the table.
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'r', newline = '') as file:
+        with open("inventory.csv", 'r', newline = '') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 tree.insert("", "end", values = (row["Item Name"], row ["SKU"], row["Quantity"])) # "" means theres no parent and end is at the end of the list and it just adds those row items.
@@ -81,13 +84,13 @@ def openInvManager():
         if not name or not sku or not quantity: # If all fields aren't given
             message_label.config(text = "All fields required.") # Changes message_label to say All fields required
             return
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'r', newline = '') as file:
+        with open("inventory.csv", 'r', newline = '') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row["SKU"] == sku:
                     message_label.config(text = "Item already exists")
                     return
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'a', newline = '') as file:
+        with open("inventory.csv", 'a', newline = '') as file:
             writer = csv.writer(file)
             writer.writerow([name, sku, quantity]) #Adds the new name,sku and quantity to the csv
         message_label.config(text = "Added Item.")
@@ -100,7 +103,7 @@ def openInvManager():
             message_label.config(text = "Enter SKU to search.")
             return
         tree.delete(*tree.get_children()) # * will separate get_children() into different arguments to delete to clear the table.
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'r', newline = '') as file:
+        with open("inventory.csv", 'r', newline = '') as file:
             reader = csv.DictReader(file)
             itemFound = False # Has the item been found
             for row in reader:
@@ -120,14 +123,14 @@ def openInvManager():
             return
         rows = [] # This list of SKUs to keep.
         itemRemoved = False
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'r', newline = '') as file:
+        with open("inventory.csv", 'r', newline = '') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row["SKU"] != sku:
                     rows.append(row) #If the SKU is not the one the use inputted to be deleted, its added to the list to keep.
                 else:
                     itemRemoved = True
-        with open("D:\\Python\\SDLC assignment\\inventory.csv", 'w', newline = '') as file:
+        with open("inventory.csv", 'w', newline = '') as file:
             writer = csv.DictWriter(file, fieldnames=["Item Name", "SKU", "Quantity"])
             writer.writeheader() 
             writer.writerows(rows) # Overwrites the CSV and adds all the rows besides the one which we wanted to remove.
